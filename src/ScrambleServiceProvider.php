@@ -22,12 +22,14 @@ use Dedoc\Scramble\Support\InferExtensions\JsonResourceTypeInfer;
 use Dedoc\Scramble\Support\InferExtensions\ModelExtension;
 use Dedoc\Scramble\Support\InferExtensions\PossibleExceptionInfer;
 use Dedoc\Scramble\Support\InferExtensions\ResourceCollectionTypeInfer;
+use Dedoc\Scramble\Support\InferExtensions\ResponderTypeInfer;
 use Dedoc\Scramble\Support\InferExtensions\ResponseFactoryTypeInfer;
 use Dedoc\Scramble\Support\InferExtensions\ValidatorTypeInfer;
 use Dedoc\Scramble\Support\OperationBuilder;
 use Dedoc\Scramble\Support\OperationExtensions\ErrorResponsesExtension;
 use Dedoc\Scramble\Support\OperationExtensions\RequestBodyExtension;
 use Dedoc\Scramble\Support\OperationExtensions\RequestEssentialsExtension;
+use Dedoc\Scramble\Support\OperationExtensions\ResponderExtension;
 use Dedoc\Scramble\Support\OperationExtensions\ResponseExtension;
 use Dedoc\Scramble\Support\ServerFactory;
 use Dedoc\Scramble\Support\TypeToSchemaExtensions\AnonymousResourceCollectionTypeToSchema;
@@ -36,6 +38,7 @@ use Dedoc\Scramble\Support\TypeToSchemaExtensions\EnumToSchema;
 use Dedoc\Scramble\Support\TypeToSchemaExtensions\JsonResourceTypeToSchema;
 use Dedoc\Scramble\Support\TypeToSchemaExtensions\LengthAwarePaginatorTypeToSchema;
 use Dedoc\Scramble\Support\TypeToSchemaExtensions\ModelToSchema;
+use Dedoc\Scramble\Support\TypeToSchemaExtensions\ResponderTypeToSchema;
 use Dedoc\Scramble\Support\TypeToSchemaExtensions\ResponseTypeToSchema;
 use PhpParser\ParserFactory;
 use Spatie\LaravelPackageTools\Package;
@@ -79,8 +82,8 @@ class ScrambleServiceProvider extends PackageServiceProvider
                     [
                         new PossibleExceptionInfer(),
                         new AbortHelpersExceptionInfer(),
-
                         new JsonResourceCallsTypeInfer(),
+                        new ResponderTypeInfer(),
                         new JsonResourceCreationInfer(),
                         new JsonResourceTypeInfer(),
                         new ValidatorTypeInfer(),
@@ -108,6 +111,7 @@ class ScrambleServiceProvider extends PackageServiceProvider
                     RequestBodyExtension::class,
                     ErrorResponsesExtension::class,
                     ResponseExtension::class,
+                    ResponderExtension::class
                 ], $operationExtensions);
             });
 
@@ -133,6 +137,7 @@ class ScrambleServiceProvider extends PackageServiceProvider
                     EnumToSchema::class,
                     JsonResourceTypeToSchema::class,
                     ModelToSchema::class,
+                    ResponderTypeToSchema::class,
                     EloquentCollectionToSchema::class,
                     AnonymousResourceCollectionTypeToSchema::class,
                     LengthAwarePaginatorTypeToSchema::class,

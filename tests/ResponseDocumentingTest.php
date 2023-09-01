@@ -1,6 +1,8 @@
 <?php
 
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Routing\Route;
+use League\Fractal\TransformerAbstract;
 
 use function Spatie\Snapshots\assertMatchesSnapshot;
 
@@ -94,5 +96,59 @@ class Foo_TestFour
 
         // Simple comment.
         return response()->json(['foo' => 'bar']);
+    }
+}
+
+test('laravel responder success support', function () {
+    \Illuminate\Support\Facades\Route::get('api/test', [Foo_TestFive::class, 'index']);
+
+    \Dedoc\Scramble\Scramble::routes(fn (Route $r) => $r->uri === 'api/test');
+    $openApiDocument = app()->make(\Dedoc\Scramble\Generator::class)();
+
+    assertMatchesSnapshot($openApiDocument);
+});
+class Foo_TestFive
+{
+    public function index()
+    {
+        $user = [];
+        return responder()->success($user, UserTransformer::class)->respond(201, [
+            'Authorization' => 'Bearer ghjkiuygvbnmkuyg'
+        ]);
+    }
+}
+
+/**
+ * @mixin User
+ */
+class UserTransformer extends TransformerAbstract
+{
+    public function transform(User $user): array
+    {
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'testString' => 'iasdihas',
+            'testNumber' => 2333
+        ];
+    }
+}
+
+test('laravel responder error support', function () {
+    \Illuminate\Support\Facades\Route::get('api/test', [Foo_TestFive::class, 'index']);
+
+    \Dedoc\Scramble\Scramble::routes(fn (Route $r) => $r->uri === 'api/test');
+    $openApiDocument = app()->make(\Dedoc\Scramble\Generator::class)();
+
+    assertMatchesSnapshot($openApiDocument);
+});
+class Foo_TestSix
+{
+    public function index()
+    {
+        $user = [];
+        return responder()->error($user, UserTransformer::class)->respond(404, [
+            'Authorization' => 'Bearer ghjkiuygvbnmkuyg'
+        ]);
     }
 }
