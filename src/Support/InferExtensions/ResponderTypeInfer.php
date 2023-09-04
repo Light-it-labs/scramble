@@ -23,6 +23,7 @@ class ResponderTypeInfer implements ExpressionTypeInferExtension
     private ObjectType $modelType;
     private string $modelPropertyName;
 
+    /** @var array<array{0: string, 1: ObjectType}> */
     public static $transformerModelTypesCache = [];
 
     public function getType(Expr $node, Scope $scope): ?Type
