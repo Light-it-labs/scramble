@@ -143,7 +143,7 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
     {
         $definition = $this->infer->analyzeClass($type->name);
 
-        $additional = $type->templateTypes[1 /* TAdditional */] ?? new UnknownType();
+        $additional = $type->templateTypes[1] ?? new UnknownType();
 
         $openApiType = $this->openApiTransformer->transform($type);
 
