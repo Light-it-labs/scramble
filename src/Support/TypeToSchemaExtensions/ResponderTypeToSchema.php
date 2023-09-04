@@ -195,7 +195,7 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
             ->uniqueName($type->name);
     }
 
-    private function mergeOpenApiObjects(OpenApiTypes\ObjectType $into, OpenApiTypes\Type $what)
+    private function mergeOpenApiObjects(OpenApiTypes\ObjectType $into, OpenApiTypes\Type $what): void
     {
         if (!$what instanceof OpenApiTypes\ObjectType) {
             return;
