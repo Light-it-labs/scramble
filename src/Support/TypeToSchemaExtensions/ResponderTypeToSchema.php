@@ -139,7 +139,7 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
     /**
      * @param  Generic  $type
      */
-    public function toResponse(Type $type)
+    public function toResponse(Type $type): Response
     {
         $definition = $this->infer->analyzeClass($type->name);
 
