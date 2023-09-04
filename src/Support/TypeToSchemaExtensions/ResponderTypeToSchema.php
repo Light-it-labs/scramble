@@ -43,7 +43,7 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
 
         $array = ($def = $type->getMethodDefinition('transform'))
             ? $def->type->getReturnType()
-            : new \Dedoc\Scramble\Support\Type\UnknownType();
+            : new UnknownType();
 
         if (!$array instanceof ArrayType) {
             return new UnknownType();
