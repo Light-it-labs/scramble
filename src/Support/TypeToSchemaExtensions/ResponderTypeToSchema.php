@@ -163,7 +163,7 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
         $wrapKey = $wrapKey ?: 'data';
 
         if ($shouldWrap) {
-            $openApiType = (new \Dedoc\Scramble\Support\Generator\Types\ObjectType())
+            $openApiType = (new \Dedoc\Scramble\Support\Generator\Types\ObjectType)
                 ->addProperty($wrapKey, $openApiType)
                 ->setRequired([$wrapKey]);
 
