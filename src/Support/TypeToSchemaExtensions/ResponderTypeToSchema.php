@@ -218,7 +218,7 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
 
         if ($type->isInstanceOf(AnonymousResourceCollection::class)) {
             return $type->templateTypes[0]->templateTypes[0]
-                ?? new \Dedoc\Scramble\Support\Type\UnknownType();
+                ?? new UnknownType();
         }
 
         if ($type->isInstanceOf(JsonResource::class)) {
