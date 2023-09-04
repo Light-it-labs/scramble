@@ -122,7 +122,7 @@ class ResponderExtension extends OperationExtension
         return $this->getTransformer($expression->var);
     }
 
-    private function getStatusCode($expression)
+    private function getStatusCode($expression): ?int
     {
         if (!$expression) {
             return null;
