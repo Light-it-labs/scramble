@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dedoc\Scramble\Support\InferExtensions;
 
 use Dedoc\Scramble\Infer\Definition\ClassDefinition;
