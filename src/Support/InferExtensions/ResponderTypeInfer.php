@@ -39,7 +39,7 @@ class ResponderTypeInfer implements ExpressionTypeInferExtension
         /** $this->? */
         if (
             $node instanceof Node\Expr\PropertyFetch && $node->var?->name === $this->modelPropertyName
-            && is_string($node->name->name ?? null)
+            && is_string($node->name?->name)
             && !array_key_exists($node->name->name, $scope->classDefinition()->properties)
             && ($type = $this->modelType($scope->classDefinition(), $scope))
         ) {
