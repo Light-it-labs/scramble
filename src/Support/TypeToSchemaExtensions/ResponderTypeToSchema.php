@@ -40,11 +40,6 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
      */
     public function toSchema(Type $type)
     {
-        /*if ($type->isInstanceOf(Collection::class)) {
-            $array = (new ResourceCollectionTypeInfer)->getBasicCollectionType($definition);
-        } else {
-            return new UnknownType();
-        }*/
 
         $array = ($def = $type->getMethodDefinition('transform'))
             ? $def->type->getReturnType()
