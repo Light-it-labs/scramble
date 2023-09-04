@@ -112,7 +112,7 @@ class ResponderTypeInfer implements ExpressionTypeInferExtension
             $modelClass = $getFqName($modelName);
 
             if (class_exists($modelClass)) {
-                return '\\' . $modelClass;
+                return "\\{$modelClass}";
             }
         }
 
