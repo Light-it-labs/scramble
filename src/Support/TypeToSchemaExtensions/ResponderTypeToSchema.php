@@ -157,7 +157,7 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
             $additional->items = $this->flattenMergeValues($additional->items);
         }
 
-        $shouldWrap = ($wrapKey = $type->name::$wrap ?? null) !== null
+        $shouldWrap = !is_null($wrapKey = $type->name::$wrap ?? null)
             || $withArray instanceof ArrayType
             || $additional instanceof ArrayType;
         $wrapKey = $wrapKey ?: 'data';
