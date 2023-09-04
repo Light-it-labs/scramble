@@ -28,7 +28,7 @@ use Orchestra\Canvas\Commands\Database\Eloquent;
 
 class ResponderTypeToSchema extends TypeToSchemaExtension
 {
-    public function shouldHandle(Type $type)
+    public function shouldHandle(Type $type): bool
     {
         return $type->isInstanceOf(TransformerAbstract::class);
     }
