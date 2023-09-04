@@ -118,7 +118,7 @@ class ResponderTypeInfer implements ExpressionTypeInferExtension
 
         $modelName = (string) Str::of(Str::of($jsonResourceClassName)->explode('\\')->last())->replace('Resource', '')->singular();
 
-        $modelClass = 'App\\Models\\' . $modelName;
+        $modelClass = "App\\Models\\{$modelName}";
         if (!class_exists($modelClass)) {
             return null;
         }
