@@ -142,6 +142,7 @@ test('laravel responder error support', function () {
 
     assertMatchesSnapshot($openApiDocument);
 });
+
 class Foo_TestSix
 {
     public function index()
