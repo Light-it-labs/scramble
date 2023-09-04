@@ -36,12 +36,13 @@ class ResponderExtension extends OperationExtension
             ->map(function ($returnStatement) {
                 $statusCode = $this->getStatusCode($returnStatement->expr);
                 $transformer = $this->getTransformer($returnStatement->expr);
+
                 if (!$transformer) {
-                    ddd($returnStatement);
                     return null;
                 }
+
                 $response = $this->openApiTransformer->toResponse(new Generic($transformer));
-                $response->code = $statusCode;
+                $response->code = $statusCode ?? 200;
 
                 return $response;
             })
