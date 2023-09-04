@@ -90,7 +90,7 @@ class TypeTransformer
 
             $props = collect($type->items)
                 ->mapWithKeys(function (ArrayItemType_ $item) use (&$requiredKeys) {
-                    if (! $item->isOptional) {
+                    if (!$item->isOptional) {
                         $requiredKeys[] = $item->key;
                     }
 
@@ -118,7 +118,7 @@ class TypeTransformer
             }
         } elseif ($type instanceof Union) {
             if (count($type->types) === 2 && collect($type->types)->contains(fn ($t) => $t instanceof \Dedoc\Scramble\Support\Type\NullType)) {
-                $notNullType = collect($type->types)->first(fn ($t) => ! ($t instanceof \Dedoc\Scramble\Support\Type\NullType));
+                $notNullType = collect($type->types)->first(fn ($t) => !($t instanceof \Dedoc\Scramble\Support\Type\NullType));
                 if ($notNullType) {
                     $openApiType = $this->transform($notNullType)->nullable(true);
                 } else {
@@ -177,7 +177,7 @@ class TypeTransformer
             function ($acc, $extensionClass) use ($type) {
                 $extension = new $extensionClass($this->infer, $this, $this->components);
 
-                if (! $extension->shouldHandle($type)) {
+                if (!$extension->shouldHandle($type)) {
                     return $acc;
                 }
 
@@ -214,9 +214,9 @@ class TypeTransformer
         );
     }
 
-    public function toResponse(Type $type)
+    public function toResponse(Type $type): Response
     {
-        if (! $response = $this->handleResponseUsingExtensions($type)) {
+        if (!$response = $this->handleResponseUsingExtensions($type)) {
             if ($type->isInstanceOf(\Throwable::class)) {
                 return null;
             }
@@ -231,8 +231,8 @@ class TypeTransformer
         /** @var PhpDocNode $docNode */
         if ($docNode = $type->getAttribute('docNode')) {
             $description = (string) Str::of($docNode->getAttribute('summary') ?: '')
-                ->append("\n\n".($docNode->getAttribute('description') ?: ''))
-                ->append("\n\n".$response->description)
+                ->append("\n\n" . ($docNode->getAttribute('description') ?: ''))
+                ->append("\n\n" . $response->description)
                 ->trim();
             $response->description($description);
 
@@ -254,13 +254,13 @@ class TypeTransformer
 
     private function handleResponseUsingExtensions(Type $type)
     {
-        if (! $type->isInstanceOf(\Throwable::class)) {
+        if (!$type->isInstanceOf(\Throwable::class)) {
             return array_reduce(
                 $this->typeToSchemaExtensions,
                 function ($acc, $extensionClass) use ($type) {
                     $extension = new $extensionClass($this->infer, $this, $this->components);
 
-                    if (! $extension->shouldHandle($type)) {
+                    if (!$extension->shouldHandle($type)) {
                         return $acc;
                     }
 
@@ -278,7 +278,7 @@ class TypeTransformer
             function ($acc, $extensionClass) use ($type) {
                 $extension = new $extensionClass($this->infer, $this, $this->components);
 
-                if (! $extension->shouldHandle($type)) {
+                if (!$extension->shouldHandle($type)) {
                     return $acc;
                 }
 

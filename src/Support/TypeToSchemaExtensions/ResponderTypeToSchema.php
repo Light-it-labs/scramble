@@ -187,14 +187,6 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
     public function reference(ObjectType $type)
     {
         return new Reference('schemas', $type->name, $this->components);
-
-        /*
-         * @todo: Allow (enforce) user to explicitly pass short and unique names for the reference.
-         * Otherwise, only class names are correctly handled for now.
-         */
-        return Reference::in('schemas')
-            ->shortName(class_basename($type->name))
-            ->uniqueName($type->name);
     }
 
     private function mergeOpenApiObjects(OpenApiTypes\ObjectType $into, OpenApiTypes\Type $what)

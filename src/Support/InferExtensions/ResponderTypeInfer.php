@@ -18,7 +18,7 @@ use Illuminate\Support\Str;
 
 class ResponderTypeInfer implements ExpressionTypeInferExtension
 {
-    private $modelType;
+    private ObjectType $modelType;
     private $modelPropertyName;
     public static $transformerModelTypesCache = [];
 

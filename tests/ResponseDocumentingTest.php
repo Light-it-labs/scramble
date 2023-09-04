@@ -135,7 +135,7 @@ class UserTransformer extends TransformerAbstract
 }
 
 test('laravel responder error support', function () {
-    \Illuminate\Support\Facades\Route::get('api/test', [Foo_TestFive::class, 'index']);
+    \Illuminate\Support\Facades\Route::get('api/test', [Foo_TestSix::class, 'index']);
 
     \Dedoc\Scramble\Scramble::routes(fn (Route $r) => $r->uri === 'api/test');
     $openApiDocument = app()->make(\Dedoc\Scramble\Generator::class)();
