@@ -80,7 +80,7 @@ class ResponderExtension extends OperationExtension
         }
     }
 
-    private function usesResponderClass($expression)
+    private function usesResponderClass($expression): ?bool
     {
         if (!$expression) {
             return false;
