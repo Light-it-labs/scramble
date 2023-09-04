@@ -97,7 +97,7 @@ class ResponderExtension extends OperationExtension
         return $this->usesResponderClass($expression->var);
     }
 
-    private function getTransformer($expression)
+    private function getTransformer($expression): ?string
     {
         if (!$expression) {
             return null;
