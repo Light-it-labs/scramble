@@ -73,7 +73,7 @@ class ResponderExtension extends OperationExtension
             })
             ->values()
             ->merge($references)
-            ->all();
+            ->each(fn (Response $response) => $operation->addResponse($response));
 
         foreach ($responses as $response) {
             $operation->addResponse($response);
