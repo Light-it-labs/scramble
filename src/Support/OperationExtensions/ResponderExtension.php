@@ -57,7 +57,7 @@ class ResponderExtension extends OperationExtension
                     return $responses->first();
                 }
 
-                return Response::make((int) $code)
+                return Response::make($code)
                     ->setContent(
                         'application/json',
                         Schema::fromType((new AnyOf)->setItems(
