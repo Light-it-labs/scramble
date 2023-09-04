@@ -213,7 +213,7 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
     private function getResourceType(Type $type): Type
     {
         if (!$type instanceof Generic) {
-            return new \Dedoc\Scramble\Support\Type\UnknownType();
+            return new UnknownType();
         }
 
         if ($type->isInstanceOf(AnonymousResourceCollection::class)) {
