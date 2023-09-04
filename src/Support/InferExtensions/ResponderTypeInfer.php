@@ -19,7 +19,7 @@ use Illuminate\Support\Str;
 class ResponderTypeInfer implements ExpressionTypeInferExtension
 {
     private $modelType;
-    private $modelPropertyName;
+    private string $modelPropertyName;
     public static $transformerModelTypesCache = [];
 
     public function getType(Expr $node, Scope $scope): ?Type
