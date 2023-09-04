@@ -52,7 +52,7 @@ class ResponderExtension extends OperationExtension
 
         $responses = $responses
             ->groupBy('code')
-            ->map(function (Collection $responses, $code) {
+            ->map(function (Collection $responses, int $code) {
                 if ($responses->count() === 1) {
                     return $responses->first();
                 }
