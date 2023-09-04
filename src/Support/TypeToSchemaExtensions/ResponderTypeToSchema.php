@@ -54,6 +54,11 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
         return $this->openApiTransformer->transform($array);
     }
 
+    /**
+     * @param array<int, ArrayItemType_> $items
+     *
+     * @return array<ArrayItemType_>
+     */
     private function flattenMergeValues(array $items)
     {
         return collect($items)
