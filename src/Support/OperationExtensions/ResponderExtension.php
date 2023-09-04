@@ -26,7 +26,7 @@ class ResponderExtension extends OperationExtension
 
         $statements = $definition->getStmts();
 
-        $returnStatements = array_filter($statements, function ($statement) {
+        $returnStatements = array_filter($statements, function (mixed $statement) {
             return $statement instanceof Return_
                 && $statement->expr instanceof \PhpParser\Node\Expr\MethodCall
                 && $this->usesResponderClass($statement->expr);
