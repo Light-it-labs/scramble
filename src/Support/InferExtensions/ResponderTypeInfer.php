@@ -104,7 +104,7 @@ class ResponderTypeInfer implements ExpressionTypeInferExtension
 
         $mixinOrPropertyLine = Str::of($phpDoc)
             ->explode("\n")
-            ->first(fn ($str) => Str::is(['*@property*$resource', '*@mixin*'], $str));
+            ->first(fn (string $str) => Str::is(['*@property*$resource', '*@mixin*'], $str));
 
         if ($mixinOrPropertyLine) {
             $modelName = Str::replace(['@property', '$resource', '@mixin', ' ', '*'], '', $mixinOrPropertyLine);
