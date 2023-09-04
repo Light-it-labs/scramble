@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dedoc\Scramble\Support\InferExtensions;
 
 use Dedoc\Scramble\Infer\Definition\ClassDefinition;
@@ -19,7 +21,8 @@ use Illuminate\Support\Str;
 class ResponderTypeInfer implements ExpressionTypeInferExtension
 {
     private ObjectType $modelType;
-    private $modelPropertyName;
+    private string $modelPropertyName;
+
     public static $transformerModelTypesCache = [];
 
     public function getType(Expr $node, Scope $scope): ?Type
@@ -31,15 +34,19 @@ class ResponderTypeInfer implements ExpressionTypeInferExtension
             return null;
         }
 
-        $transformerArguments = $scope->classDefinition()->getMethodDefinition('transform')->type->arguments;
+        $transformerArguments = $scope
+            ->classDefinition()
+            ->getMethodDefinition('transform')
+            ->type
+            ->arguments;
 
         $this->modelPropertyName = array_key_first($transformerArguments);
         $this->modelType = $transformerArguments[$this->modelPropertyName]->is;
 
         /** $this->? */
         if (
-            $node instanceof Node\Expr\PropertyFetch && ($node->var->name ?? null) === $this->modelPropertyName
-            && is_string($node->name->name ?? null)
+            $node instanceof Node\Expr\PropertyFetch && $node->var?->name === $this->modelPropertyName
+            && is_string($node->name?->name)
             && !array_key_exists($node->name->name, $scope->classDefinition()->properties)
             && ($type = $this->modelType($scope->classDefinition(), $scope))
         ) {
@@ -104,7 +111,7 @@ class ResponderTypeInfer implements ExpressionTypeInferExtension
 
         $mixinOrPropertyLine = Str::of($phpDoc)
             ->explode("\n")
-            ->first(fn ($str) => Str::is(['*@property*$resource', '*@mixin*'], $str));
+            ->first(fn (string $str) => Str::is(['*@property*$resource', '*@mixin*'], $str));
 
         if ($mixinOrPropertyLine) {
             $modelName = Str::replace(['@property', '$resource', '@mixin', ' ', '*'], '', $mixinOrPropertyLine);
@@ -112,13 +119,13 @@ class ResponderTypeInfer implements ExpressionTypeInferExtension
             $modelClass = $getFqName($modelName);
 
             if (class_exists($modelClass)) {
-                return '\\' . $modelClass;
+                return "\\{$modelClass}";
             }
         }
 
         $modelName = (string) Str::of(Str::of($jsonResourceClassName)->explode('\\')->last())->replace('Resource', '')->singular();
 
-        $modelClass = 'App\\Models\\' . $modelName;
+        $modelClass = "App\\Models\\{$modelName}";
         if (!class_exists($modelClass)) {
             return null;
         }

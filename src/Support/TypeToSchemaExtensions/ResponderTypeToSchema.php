@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dedoc\Scramble\Support\TypeToSchemaExtensions;
 
 use Dedoc\Scramble\Extensions\TypeToSchemaExtension;
@@ -28,7 +30,7 @@ use Orchestra\Canvas\Commands\Database\Eloquent;
 
 class ResponderTypeToSchema extends TypeToSchemaExtension
 {
-    public function shouldHandle(Type $type)
+    public function shouldHandle(Type $type): bool
     {
         return $type->isInstanceOf(TransformerAbstract::class);
     }
@@ -38,15 +40,10 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
      */
     public function toSchema(Type $type)
     {
-        /*if ($type->isInstanceOf(Collection::class)) {
-            $array = (new ResourceCollectionTypeInfer)->getBasicCollectionType($definition);
-        } else {
-            return new UnknownType();
-        }*/
 
         $array = ($def = $type->getMethodDefinition('transform'))
             ? $def->type->getReturnType()
-            : new \Dedoc\Scramble\Support\Type\UnknownType();
+            : new UnknownType();
 
         if (!$array instanceof ArrayType) {
             return new UnknownType();
@@ -142,11 +139,11 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
     /**
      * @param  Generic  $type
      */
-    public function toResponse(Type $type)
+    public function toResponse(Type $type): Response
     {
         $definition = $this->infer->analyzeClass($type->name);
 
-        $additional = $type->templateTypes[1 /* TAdditional */] ?? new UnknownType();
+        $additional = $type->templateTypes[1] ?? new UnknownType();
 
         $openApiType = $this->openApiTransformer->transform($type);
 
@@ -157,13 +154,14 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
             $additional->items = $this->flattenMergeValues($additional->items);
         }
 
-        $shouldWrap = ($wrapKey = $type->name::$wrap ?? null) !== null
+        $shouldWrap = !is_null($wrapKey = $type->name::$wrap ?? null)
             || $withArray instanceof ArrayType
             || $additional instanceof ArrayType;
+
         $wrapKey = $wrapKey ?: 'data';
 
         if ($shouldWrap) {
-            $openApiType = (new \Dedoc\Scramble\Support\Generator\Types\ObjectType())
+            $openApiType = (new \Dedoc\Scramble\Support\Generator\Types\ObjectType)
                 ->addProperty($wrapKey, $openApiType)
                 ->setRequired([$wrapKey]);
 
@@ -184,12 +182,12 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
             );
     }
 
-    public function reference(ObjectType $type)
+    public function reference(ObjectType $type): Reference
     {
         return new Reference('schemas', $type->name, $this->components);
     }
 
-    private function mergeOpenApiObjects(OpenApiTypes\ObjectType $into, OpenApiTypes\Type $what)
+    private function mergeOpenApiObjects(OpenApiTypes\ObjectType $into, OpenApiTypes\Type $what): void
     {
         if (!$what instanceof OpenApiTypes\ObjectType) {
             return;
@@ -205,18 +203,18 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
     private function getResourceType(Type $type): Type
     {
         if (!$type instanceof Generic) {
-            return new \Dedoc\Scramble\Support\Type\UnknownType();
+            return new UnknownType();
         }
 
         if ($type->isInstanceOf(AnonymousResourceCollection::class)) {
             return $type->templateTypes[0]->templateTypes[0]
-                ?? new \Dedoc\Scramble\Support\Type\UnknownType();
+                ?? new UnknownType();
         }
 
         if ($type->isInstanceOf(JsonResource::class)) {
             return $type->templateTypes[0];
         }
 
-        return new \Dedoc\Scramble\Support\Type\UnknownType();
+        return new UnknownType();
     }
 }

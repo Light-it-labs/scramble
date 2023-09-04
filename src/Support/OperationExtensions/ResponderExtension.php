@@ -26,7 +26,7 @@ class ResponderExtension extends OperationExtension
 
         $statements = $definition->getStmts();
 
-        $returnStatements = array_filter($statements, function ($statement) {
+        $returnStatements = array_filter($statements, function (mixed $statement) {
             return $statement instanceof Return_
                 && $statement->expr instanceof \PhpParser\Node\Expr\MethodCall
                 && $this->usesResponderClass($statement->expr);
@@ -52,12 +52,12 @@ class ResponderExtension extends OperationExtension
 
         $responses = $responses
             ->groupBy('code')
-            ->map(function (Collection $responses, $code) {
-                if (count($responses) === 1) {
+            ->map(function (Collection $responses, int $code) {
+                if ($responses->count() === 1) {
                     return $responses->first();
                 }
 
-                return Response::make((int) $code)
+                return Response::make($code)
                     ->setContent(
                         'application/json',
                         Schema::fromType((new AnyOf)->setItems(
@@ -73,14 +73,14 @@ class ResponderExtension extends OperationExtension
             })
             ->values()
             ->merge($references)
-            ->all();
+            ->each(fn (Response $response) => $operation->addResponse($response));
 
         foreach ($responses as $response) {
             $operation->addResponse($response);
         }
     }
 
-    private function usesResponderClass($expression)
+    private function usesResponderClass($expression): ?bool
     {
         if (!$expression) {
             return false;
@@ -97,7 +97,7 @@ class ResponderExtension extends OperationExtension
         return $this->usesResponderClass($expression->var);
     }
 
-    private function getTransformer($expression)
+    private function getTransformer($expression): ?string
     {
         if (!$expression) {
             return null;
@@ -122,7 +122,7 @@ class ResponderExtension extends OperationExtension
         return $this->getTransformer($expression->var);
     }
 
-    private function getStatusCode($expression)
+    private function getStatusCode($expression): ?int
     {
         if (!$expression) {
             return null;
