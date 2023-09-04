@@ -11,7 +11,6 @@ use League\Fractal\TransformerAbstract;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use Dedoc\Scramble\Support\Generator\Types\UnknownType;
-use Dedoc\Scramble\Support\Type\FunctionType;
 use Dedoc\Scramble\Infer\Services\FileNameResolver;
 use Dedoc\Scramble\Support\ResponseExtractor\ModelInfo;
 use Illuminate\Database\Eloquent\Model;
@@ -35,15 +34,14 @@ class ResponderTypeInfer implements ExpressionTypeInferExtension
         $transformerArguments = $scope->classDefinition()->getMethodDefinition('transform')->type->arguments;
 
         $this->modelPropertyName = array_key_first($transformerArguments);
-        $this->modelType = $transformerArguments[$this->modelPropertyName]->is->toString();
+        $this->modelType = $transformerArguments[$this->modelPropertyName]->is;
 
-        print_r($node);
         /** $this->? */
         if (
             $node instanceof Node\Expr\PropertyFetch && ($node->var->name ?? null) === $this->modelPropertyName
             && is_string($node->name->name ?? null)
             && !array_key_exists($node->name->name, $scope->classDefinition()->properties)
-            && ($type = static::modelType($scope->classDefinition(), $scope))
+            && ($type = $this->modelType($scope->classDefinition(), $scope))
         ) {
             return $scope->getPropertyFetchType($type, $node->name->name);
         }
@@ -58,7 +56,7 @@ class ResponderTypeInfer implements ExpressionTypeInferExtension
         return null;
     }
 
-    private static function modelType(ClassDefinition $jsonClass, Scope $scope): ?Type
+    private function modelType(ClassDefinition $jsonClass, Scope $scope): ?Type
     {
         if ([$cachedModelType, $cachedModelDefinition] = static::$transformerModelTypesCache[$jsonClass->name] ?? null) {
             if ($cachedModelDefinition) {
@@ -68,7 +66,7 @@ class ResponderTypeInfer implements ExpressionTypeInferExtension
             return $cachedModelType;
         }
 
-        $modelClass = static::getModelName(
+        $modelClass = $this->getModelName(
             $jsonClass->name,
             new \ReflectionClass($jsonClass->name),
             $scope->nameResolver,
@@ -95,8 +93,13 @@ class ResponderTypeInfer implements ExpressionTypeInferExtension
         return $modelType;
     }
 
-    private static function getModelName(string $jsonResourceClassName, \ReflectionClass $reflectionClass, FileNameResolver $getFqName)
+    private function getModelName(string $jsonResourceClassName, \ReflectionClass $reflectionClass, FileNameResolver $getFqName)
     {
+
+        if ($this->modelType) {
+            return $this->modelType->toString();
+        }
+
         $phpDoc = $reflectionClass->getDocComment() ?: '';
 
         $mixinOrPropertyLine = Str::of($phpDoc)
