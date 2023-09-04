@@ -225,6 +225,6 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
             return $type->templateTypes[0];
         }
 
-        return new \Dedoc\Scramble\Support\Type\UnknownType();
+        return new UnknownType();
     }
 }
