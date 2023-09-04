@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dedoc\Scramble\Support\TypeToSchemaExtensions;
 
 use Dedoc\Scramble\Extensions\TypeToSchemaExtension;
