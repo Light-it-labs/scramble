@@ -182,7 +182,7 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
             );
     }
 
-    public function reference(ObjectType $type)
+    public function reference(ObjectType $type): Reference
     {
         return new Reference('schemas', $type->name, $this->components);
 
