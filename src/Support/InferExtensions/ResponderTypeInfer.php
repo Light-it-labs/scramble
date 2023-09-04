@@ -31,7 +31,11 @@ class ResponderTypeInfer implements ExpressionTypeInferExtension
             return null;
         }
 
-        $transformerArguments = $scope->classDefinition()->getMethodDefinition('transform')->type->arguments;
+        $transformerArguments = $scope
+            ->classDefinition()
+            ->getMethodDefinition('transform')
+            ->type
+            ->arguments;
 
         $this->modelPropertyName = array_key_first($transformerArguments);
         $this->modelType = $transformerArguments[$this->modelPropertyName]->is;
