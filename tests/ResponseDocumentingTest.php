@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use League\Fractal\TransformerAbstract;
 

@@ -74,10 +74,6 @@ class ResponderExtension extends OperationExtension
             ->values()
             ->merge($references)
             ->each(fn (Response $response) => $operation->addResponse($response));
-
-        foreach ($responses as $response) {
-            $operation->addResponse($response);
-        }
     }
 
     private function usesResponderClass($expression): ?bool

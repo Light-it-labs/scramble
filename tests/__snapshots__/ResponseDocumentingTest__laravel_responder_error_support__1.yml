@@ -5,6 +5,6 @@ info:
 servers:
     - { url: 'http://localhost/api' }
 paths:
-    /test: { get: { operationId: fooTestFive.index, tags: [Foo_TestFive], responses: { 200: { description: '', content: { application/json: { schema: { type: string } } } }, 201: { description: '`UserTransformer`', content: { application/json: { schema: { $ref: '#/components/schemas/UserTransformer' } } } } } } }
+    /test: { get: { operationId: fooTestSix.index, tags: [Foo_TestSix], responses: { 200: { description: '', content: { application/json: { schema: { type: string } } } }, 404: { description: '`UserTransformer`', content: { application/json: { schema: { $ref: '#/components/schemas/UserTransformer' } } } } } } }
 components:
     schemas: { UserTransformer: { type: object, properties: { id: { type: integer }, name: { type: string }, testString: { type: string, example: iasdihas }, testNumber: { type: integer } }, required: [id, name, testString, testNumber], title: UserTransformer } }
