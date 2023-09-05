@@ -33,7 +33,7 @@ class ResponderExtension extends OperationExtension
         });
 
         $responses = collect($returnStatements)
-            ->map(function ($returnStatement) {
+            ->map(function (mixed $returnStatement) {
                 $statusCode = $this->getStatusCode($returnStatement->expr);
                 $transformer = $this->getTransformer($returnStatement->expr);
 
