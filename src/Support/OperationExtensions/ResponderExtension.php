@@ -48,7 +48,7 @@ class ResponderExtension extends OperationExtension
             })
             ->filter();
 
-        [$responses, $references] = $responses->partition(fn ($r) => $r instanceof Response);
+        [$responses, $references] = $responses->partition(fn (mixed $r) => $r instanceof Response);
 
         $responses = $responses
             ->groupBy('code')
