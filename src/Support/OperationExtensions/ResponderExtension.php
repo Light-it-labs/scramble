@@ -16,7 +16,7 @@ use PhpParser\Node\Stmt\Return_;
 
 class ResponderExtension extends OperationExtension
 {
-    public function handle(Operation $operation, RouteInfo $routeInfo)
+    public function handle(Operation $operation, RouteInfo $routeInfo): void
     {
         $definition = $routeInfo->methodNode();
 
