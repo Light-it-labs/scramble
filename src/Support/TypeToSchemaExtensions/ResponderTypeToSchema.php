@@ -59,7 +59,7 @@ class ResponderTypeToSchema extends TypeToSchemaExtension
      *
      * @return array<ArrayItemType_>
      */
-    private function flattenMergeValues(array $items)
+    private function flattenMergeValues(array $items): array
     {
         return collect($items)
             ->flatMap(function (ArrayItemType_ $item) {
