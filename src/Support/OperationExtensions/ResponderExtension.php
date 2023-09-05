@@ -66,7 +66,7 @@ class ResponderExtension extends OperationExtension
                                  * Empty response body can happen, and in case it is going to be grouped
                                  * by status, it should become an empty string.
                                  */
-                                ->map(fn ($type) => $type ?: new OpenApiTypes\StringType)
+                                ->map(fn (mixed $type) => $type ?: new OpenApiTypes\StringType)
                                 ->all()
                         ))
                     );
