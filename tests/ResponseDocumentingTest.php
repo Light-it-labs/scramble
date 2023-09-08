@@ -1,5 +1,6 @@
 <?php
 
+use Flugg\Responder\Transformers\Transformer;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
@@ -112,8 +113,8 @@ class Foo_TestFive
 {
     public function index()
     {
-        $user = [];
-        return responder()->success($user, UserTransformer::class)->respond(201, [
+        $users = [new User()];
+        return responder()->success($users, UserTransformer::class)->respond(201, [
             'Authorization' => 'Bearer ghjkiuygvbnmkuyg'
         ]);
     }
@@ -122,8 +123,13 @@ class Foo_TestFive
 /**
  * @mixin User
  */
-class UserTransformer extends TransformerAbstract
+class UserTransformer extends Transformer
 {
+    protected $relations = [
+        'project' => ProductTransformer::class,
+        'users' => UserTransformer::class,
+    ];
+
     public function transform(User $user): array
     {
         return [
@@ -131,6 +137,26 @@ class UserTransformer extends TransformerAbstract
             'name' => $user->name,
             'testString' => 'iasdihas',
             'testNumber' => 2333
+        ];
+    }
+}
+
+/**
+ * @mixin User
+ */
+class ProductTransformer extends Transformer
+{
+    protected $load = [
+        'hello' => ProductTransformer::class,
+        'adeus' => UserTransformer::class,
+    ];
+
+    public function transform(User $product): array
+    {
+        return [
+            'id' => $product->id,
+            'name' => $product->name,
+            'product' => 'product123',
         ];
     }
 }
@@ -144,12 +170,14 @@ test('laravel responder error support', function () {
     assertMatchesSnapshot($openApiDocument);
 });
 
+
+
 class Foo_TestSix
 {
     public function index()
     {
-        $user = [];
-        return responder()->error($user, UserTransformer::class)->respond(404, [
+        $users = new User();
+        return responder()->error($users, UserTransformer::class)->respond(Response::HTTP_NOT_FOUND, [
             'Authorization' => 'Bearer ghjkiuygvbnmkuyg'
         ]);
     }

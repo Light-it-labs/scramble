@@ -1,10 +1,68 @@
 openapi: 3.1.0
 info:
-    title: Laravel
-    version: 0.0.1
+  title: Laravel
+  version: 0.0.1
 servers:
-    - { url: 'http://localhost/api' }
+  - { url: "http://localhost/api" }
 paths:
-    /test: { get: { operationId: fooTestSix.index, tags: [Foo_TestSix], responses: { 200: { description: '', content: { application/json: { schema: { type: string } } } }, 404: { description: '`UserTransformer`', content: { application/json: { schema: { $ref: '#/components/schemas/UserTransformer' } } } } } } }
+  /test:
+    {
+      get:
+        {
+          operationId: fooTestSix.index,
+          tags: [Foo_TestSix],
+          responses:
+            {
+              200:
+                {
+                  description: "",
+                  content: { application/json: { schema: { type: string } } },
+                },
+              404:
+                {
+                  description: "`UserTransformer`",
+                  content:
+                    {
+                      application/json:
+                        {
+                          schema:
+                            { $ref: "#/components/schemas/UserTransformer" },
+                        },
+                    },
+                },
+            },
+        },
+    }
 components:
-    schemas: { UserTransformer: { type: object, properties: { id: { type: integer }, name: { type: string }, testString: { type: string, example: iasdihas }, testNumber: { type: integer } }, required: [id, name, testString, testNumber], title: UserTransformer } }
+  schemas:
+    {
+      ProductTransformer:
+        {
+          type: object,
+          properties:
+            {
+              id: { type: integer },
+              name: { type: string },
+              product: { type: string, example: product123 },
+              hello: { $ref: "#/components/schemas/ProductTransformer" },
+              adeus: { $ref: "#/components/schemas/UserTransformer" },
+            },
+          required: [id, name, product, hello, adeus],
+          title: ProductTransformer,
+        },
+      UserTransformer:
+        {
+          type: object,
+          properties:
+            {
+              id: { type: integer },
+              name: { type: string },
+              testString: { type: string, example: iasdihas },
+              testNumber: { type: integer },
+              project: { $ref: "#/components/schemas/ProductTransformer" },
+              users: { $ref: "#/components/schemas/UserTransformer" },
+            },
+          required: [id, name, testString, testNumber],
+          title: UserTransformer,
+        },
+    }

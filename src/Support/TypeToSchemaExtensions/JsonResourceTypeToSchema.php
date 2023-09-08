@@ -29,7 +29,7 @@ class JsonResourceTypeToSchema extends TypeToSchemaExtension
     {
         return $type instanceof ObjectType
             && $type->isInstanceOf(JsonResource::class)
-            && ! $type->isInstanceOf(AnonymousResourceCollection::class);
+            && !$type->isInstanceOf(AnonymousResourceCollection::class);
     }
 
     /**
@@ -43,7 +43,9 @@ class JsonResourceTypeToSchema extends TypeToSchemaExtension
             ? $def->type->getReturnType()
             : new \Dedoc\Scramble\Support\Type\UnknownType();
 
-        if (! $array instanceof ArrayType) {
+
+        //dd($array);
+        if (!$array instanceof ArrayType) {
             if ($type->isInstanceOf(ResourceCollection::class)) {
                 $array = (new ResourceCollectionTypeInfer)->getBasicCollectionType($definition);
             } else {
@@ -51,7 +53,7 @@ class JsonResourceTypeToSchema extends TypeToSchemaExtension
             }
         }
 
-        if (! $array instanceof ArrayType) {
+        if (!$array instanceof ArrayType) {
             return new UnknownType();
         }
 
@@ -91,9 +93,9 @@ class JsonResourceTypeToSchema extends TypeToSchemaExtension
                     $item->value instanceof Union
                     && (new TypeWalker)->first($item->value, fn (Type $t) => $t->isInstanceOf(MissingValue::class))
                 ) {
-                    $newType = array_filter($item->value->types, fn (Type $t) => ! $t->isInstanceOf(MissingValue::class));
+                    $newType = array_filter($item->value->types, fn (Type $t) => !$t->isInstanceOf(MissingValue::class));
 
-                    if (! count($newType)) {
+                    if (!count($newType)) {
                         return [];
                     }
 
@@ -118,7 +120,7 @@ class JsonResourceTypeToSchema extends TypeToSchemaExtension
 
                     // Second generic argument of the `MergeValue` class must be an array.
                     // Otherwise, we ignore it from the resulting array.
-                    if (! $arrayToMerge instanceof ArrayType) {
+                    if (!$arrayToMerge instanceof ArrayType) {
                         return [];
                     }
 
@@ -127,7 +129,7 @@ class JsonResourceTypeToSchema extends TypeToSchemaExtension
                     $mergingArrayValuesShouldBeRequired = $item->value->templateTypes[0] instanceof LiteralBooleanType
                         && $item->value->templateTypes[0]->value === true;
 
-                    if (! $mergingArrayValuesShouldBeRequired || $item->isOptional) {
+                    if (!$mergingArrayValuesShouldBeRequired || $item->isOptional) {
                         foreach ($arrayToMergeItems as $mergingItem) {
                             $mergingItem->isOptional = true;
                         }
@@ -180,7 +182,7 @@ class JsonResourceTypeToSchema extends TypeToSchemaExtension
         }
 
         return Response::make(200)
-            ->description('`'.$this->components->uniqueSchemaName($type->name).'`')
+            ->description('`' . $this->components->uniqueSchemaName($type->name) . '`')
             ->setContent(
                 'application/json',
                 Schema::fromType($openApiType),
@@ -202,7 +204,7 @@ class JsonResourceTypeToSchema extends TypeToSchemaExtension
 
     private function mergeOpenApiObjects(OpenApiTypes\ObjectType $into, OpenApiTypes\Type $what)
     {
-        if (! $what instanceof OpenApiTypes\ObjectType) {
+        if (!$what instanceof OpenApiTypes\ObjectType) {
             return;
         }
 
@@ -215,7 +217,7 @@ class JsonResourceTypeToSchema extends TypeToSchemaExtension
 
     private function getResourceType(Type $type): Type
     {
-        if (! $type instanceof Generic) {
+        if (!$type instanceof Generic) {
             return new \Dedoc\Scramble\Support\Type\UnknownType();
         }
 

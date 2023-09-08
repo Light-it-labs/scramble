@@ -38,7 +38,7 @@ class ObjectType extends AbstractType
 
         $definition = $scope->index->getClassDefinition($this->name);
 
-        if (! $propertyDefinition = $definition?->getPropertyDefinition($propertyName)) {
+        if (!$propertyDefinition = $definition?->getPropertyDefinition($propertyName)) {
             return new UnknownType("Cannot get a property type [$propertyName] on type [{$this->name}]");
         }
 
@@ -63,7 +63,7 @@ class ObjectType extends AbstractType
             return $returnType;
         }
 
-        if (! $methodDefinition = $this->getMethodDefinition($methodName)) {
+        if (!$methodDefinition = $this->getMethodDefinition($methodName)) {
             return null;
         }
 
